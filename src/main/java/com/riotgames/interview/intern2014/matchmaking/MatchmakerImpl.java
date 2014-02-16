@@ -23,10 +23,10 @@ public class MatchmakerImpl implements Matchmaker {
 		Set<Player> team2 = new HashSet<Player>();
 
 		//Set up our variables
-		double tolerance = 0.05; //our initial/current tolerance for matchmaking
+		double tolerance = 0.00; //our initial/current tolerance for matchmaking
 		int totalGameTolerance = 100; //initial/current total game tolerance
 		
-		int attempts = 1000; //If we try 1000 times and cannot find a team, quit
+		int attempts = 100; //If we try 1000 times and cannot find a team, quit
 		
 		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
@@ -38,7 +38,7 @@ public class MatchmakerImpl implements Matchmaker {
 			
 			//Make sure the player is a good fit for both teams:
 			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)
-					&& team1.size() < 5
+					&& team1.size() < playersPerTeam
 					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)){
 				team1.add(p1); //Add player to team1
 				itr.remove(); //Remove player from queue.
@@ -56,14 +56,13 @@ public class MatchmakerImpl implements Matchmaker {
 				break; //Teams found! Can stop searching.
 			}
 			
-			attempts--; //We should only try 1000 times before we give up.
-			
 			//If we still haven't found a match, yet reached the end of
 			// the queue, loosen our tolerance up a bit!
 			if(!itr.hasNext() && this.matchmakingQueue.size() > 0){
 				itr = this.matchmakingQueue.iterator();
-				tolerance += 0.05;
-				totalGameTolerance += 100;
+				tolerance += 0.01;
+				totalGameTolerance += 15;
+				attempts--; //We should only try 100 times before we give up.
 			}
 		}
 
@@ -74,7 +73,6 @@ public class MatchmakerImpl implements Matchmaker {
 	}
 
 	public void enterMatchmaking(Player player) {
-		// TODO fully finish this
 		//Add the player into the Matchmaking Queue
 		this.matchmakingQueue.offer(player);
 	}
