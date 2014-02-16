@@ -10,7 +10,7 @@ public class Test {
 	public static void main(String[] args){
 		//Get our sample list of players
 		List<Player> players = SampleData.getPlayers();
-		
+
 		//Initialize our MatchmakerImplementation
 		MatchmakerImpl mmi = new MatchmakerImpl();
 
@@ -18,63 +18,74 @@ public class Test {
 		for(Player p : players){
 			mmi.enterMatchmaking(p);
 		}
-	
+
 		//Retrieve the current Queue.
 		Queue<Player> queue = mmi.getQueue();
-		
+
 		//Attempt to match up 5v5 players until the queue is empty:
-		
+
 		//Get our first match as a demo, to visualize the algorithm.
 		Match m = mmi.findMatch(5);
-		HashSet<Player> team1 = (HashSet<Player>) m.getTeam1();
-		HashSet<Player> team2 = (HashSet<Player>) m.getTeam2();
-		
+
 		//Create our list of matches:
 		LinkedList<Match> matches = new LinkedList<Match>();
-		
+
 		//Add our first match to the matches list:
 		matches.add(m);
-		
-		
+
+		//Get our Iterator to use for the queue
 		Iterator<Player> itr = null;
-		
+
+		//While our queue isn't empty, keep finding matches
 		while(!queue.isEmpty()){
 			itr = queue.iterator();
 			while(itr.hasNext()){
 				matches.add(mmi.findMatch(5));
-				System.out.println("Match found!");
+//				System.out.println("Match found!");
 			}
 		}
 		
+		System.out.println("********** SAMPLE MATCHUP: **********");
+		printMatchup(m);
+
+	}
+
+	public static void printMatchup(Match m){
 		//Team score = sum of total games played / sum of WLRs
+		HashSet<Player> team1 = (HashSet<Player>) m.getTeam1();
+		HashSet<Player> team2 = (HashSet<Player>) m.getTeam2();
+
+		//Set up variables:
 		double team1WLR = 0;
 		double team1GamesPlayed = 0;
-		
+
 		double team2WLR = 0;
 		double team2GamesPlayed = 0;
-		
-		System.out.println("********** SAMPLE MATCHUP: **********");
+
+		//Print out Team 1 players and stats
 		System.out.println("***TEAM 1:***");
 		for(Player player: team1){
 			System.out.print(player);
 			System.out.printf(" Total: %d, WLR: %f\n",
 					player.getWins() + player.getLosses(), player.getWLR());
-			 team1WLR += player.getWLR();
-			 team1GamesPlayed += player.getWins() + player.getLosses();
+			team1WLR += player.getWLR();
+			team1GamesPlayed += player.getWins() + player.getLosses();
 		}
-		
+
 		System.out.println("Team 1 'score': " + team1GamesPlayed / team1WLR);
 		System.out.println();
+
 		
+		//Print out Team 2 players and stats
 		System.out.println("***TEAM 2:***");
 		for(Player player: team2){
 			System.out.print(player);
 			System.out.printf(" Total: %d, WLR: %f\n",
 					player.getWins() + player.getLosses(), player.getWLR()); 
-			 team2WLR += player.getWLR();
-			 team2GamesPlayed += player.getWins() + player.getLosses();
+			team2WLR += player.getWLR();
+			team2GamesPlayed += player.getWins() + player.getLosses();
 		}
-		
+
 		System.out.println("Team 2 'score': " + team2GamesPlayed / team2WLR);
 	}
 
