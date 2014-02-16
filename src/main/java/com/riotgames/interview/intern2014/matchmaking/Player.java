@@ -56,7 +56,6 @@ public class Player implements Comparable<Player>{
      * Factor 2: Total games played +/- another tolerance
      */
     public boolean isCompatibleWith(Player other, double tolerance, int totalGameTolerance){
-    	//TODO: Coalesce these two factors
     	boolean factor1 = false;
     	boolean factor2 = false;
     	
@@ -112,6 +111,12 @@ public class Player implements Comparable<Player>{
     	}
     }
     
+    
+    /*
+     * Allows us to easily visualize a Player by printing it directly
+     * to stdout. (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString(){
     	return this.name + "   Wins: " + this.wins + " Losses: " + this.losses;
     }

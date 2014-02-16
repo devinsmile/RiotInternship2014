@@ -70,8 +70,8 @@ public class MatchmakerImpl implements Matchmaker {
 			 */
 			if(!itr.hasNext() && this.matchmakingQueue.size() > 0){
 				itr = this.matchmakingQueue.iterator();
-				tolerance += 0.01;
-				totalGameTolerance += 15;
+				tolerance += 0.01; //Bump up the WLR tolerance
+				totalGameTolerance += 15; //Bump up the total games played tolerance
 				attempts--; //We should only try 100 times before we give up.
 			}
 		}

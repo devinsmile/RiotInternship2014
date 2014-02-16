@@ -13,58 +13,39 @@ public class Test {
 		
 		//Initialize our MatchmakerImplementation
 		MatchmakerImpl mmi = new MatchmakerImpl();
-		
-		//Create ten dummy players - five for each team
-		//Team 1:
-//		Player p1 = new Player("Ricky", 80, 100); //WLR 0.80
-//		Player p2 = new Player("Krissy", 85, 100); //WLR 0.85
-//		Player p3 = new Player("Topkek", 85, 100); //WLR 0.85
-//		Player p4 = new Player("Toplel", 80, 100); // WLR 0.80
-//		Player p5 = new Player("Tophue", 85, 100); //WLR 0.80
-//		
-//		//Team 2:
-//		Player p6 = new Player("Troll1", 50, 1000); //WLR 0.05
-//		Player p7 = new Player("Troll2", 50, 1000); //WLR 0.05
-//		Player p8 = new Player("Troll3", 50, 1000); //WLR 0.05
-//		Player p9 = new Player("Troll4", 50, 1000); //WLR 0.05
-//		Player p10 = new Player("Troll5", 50, 1000); //WLR 0.05
 
-		//Add all players to matchmaking queue
-		//Team 1:
-//		mmi.enterMatchmaking(p1);
-//		mmi.enterMatchmaking(p2);
-//		mmi.enterMatchmaking(p3);
-//		mmi.enterMatchmaking(p4);
-//		mmi.enterMatchmaking(p5);
-//		
-//		//Team 2:
-//		mmi.enterMatchmaking(p6);
-//		mmi.enterMatchmaking(p7);
-//		mmi.enterMatchmaking(p8);
-//		mmi.enterMatchmaking(p9);
-//		mmi.enterMatchmaking(p10);
+		//Enter all of our Players into the queue.
 		for(Player p : players){
 			mmi.enterMatchmaking(p);
 		}
+	
+		//Retrieve the current Queue.
+		Queue<Player> queue = mmi.getQueue();
 		
-//		Queue<Player> queue = mmi.getQueue();
-
-		//Show all players that are in the queue currently
-//		Iterator<Player> itr = queue.iterator();
-//		Player p;
-//		while(itr.hasNext()){
-//			p = itr.next();
-//			System.out.print(p);
-//			System.out.printf(" WLR: %1.2f\n", p.getWLR());
-//		}
+		//Attempt to match up 5v5 players until the queue is empty:
 		
-		//Attempt to match up 5v5 players
+		//Get our first match as a demo, to visualize the algorithm.
 		Match m = mmi.findMatch(5);
 		HashSet<Player> team1 = (HashSet<Player>) m.getTeam1();
 		HashSet<Player> team2 = (HashSet<Player>) m.getTeam2();
 		
+		//Create our list of matches:
+		LinkedList<Match> matches = new LinkedList<Match>();
 		
-		//TODO: Team "Scores" to see if two teams are compatible
+		//Add our first match to the matches list:
+		matches.add(m);
+		
+		
+		Iterator<Player> itr = null;
+		
+		while(!queue.isEmpty()){
+			itr = queue.iterator();
+			while(itr.hasNext()){
+				matches.add(mmi.findMatch(5));
+				System.out.println("Match found!");
+			}
+		}
+		
 		//Team score = sum of total games played / sum of WLRs
 		double team1WLR = 0;
 		double team1GamesPlayed = 0;
@@ -72,6 +53,7 @@ public class Test {
 		double team2WLR = 0;
 		double team2GamesPlayed = 0;
 		
+		System.out.println("********** SAMPLE MATCHUP: **********");
 		System.out.println("***TEAM 1:***");
 		for(Player player: team1){
 			System.out.print(player);
