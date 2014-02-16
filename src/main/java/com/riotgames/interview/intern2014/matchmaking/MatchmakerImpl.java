@@ -33,14 +33,21 @@ public class MatchmakerImpl implements Matchmaker {
 		Player p1 = null;
 		while(itr.hasNext() && attempts > 0){
 			p1 = itr.next();
+			
+			//TODO: Coalesce these two if-statements into one
+			
+			//Make sure the player is a good fit for both teams:
 			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)
-					&& team1.size() < 5){
+					&& team1.size() < 5
+					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)){
 				team1.add(p1); //Add player to team1
 				itr.remove(); //Remove player from queue.
 			}
 
+			//Again, make sure the player is a good fit for both teams:
 			else if(p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)
-					&& team2.size() < playersPerTeam){
+					&& team2.size() < playersPerTeam
+					&& p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)){
 				team2.add(p1); //Add player to team2
 				itr.remove(); //Remove player from queue.
 			}
@@ -55,8 +62,8 @@ public class MatchmakerImpl implements Matchmaker {
 			// the queue, loosen our tolerance up a bit!
 			if(!itr.hasNext() && this.matchmakingQueue.size() > 0){
 				itr = this.matchmakingQueue.iterator();
-				tolerance += 0.20;
-				totalGameTolerance += 200;
+				tolerance += 0.05;
+				totalGameTolerance += 100;
 			}
 		}
 
