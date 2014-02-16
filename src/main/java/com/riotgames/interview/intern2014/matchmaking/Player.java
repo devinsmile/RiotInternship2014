@@ -48,22 +48,45 @@ public class Player implements Comparable<Player>{
     }
     
     /*
-     * This 
+     * This uses two factors of compatibility to determine whether
+     * or not two players are potentially compatible with each other
+     * to be on a team. 
+     * 
+     * Factor 1: Win/Loss Ratio +/- a tolerance
+     * Factor 2: Total games played +/- another tolerance
      */
-    public boolean isCompatibleWith(Player other, double tolerance){
+    public boolean isCompatibleWith(Player other, double tolerance, int totalGameTolerance){
+    	//TODO: Coalesce these two factors
+    	boolean factor1 = false;
+    	boolean factor2 = false;
+    	
+    	//First factor:
     	// this.WLR +/- tolerance of the other WLR
     	if(other.getWLR() <= this.getWLR() + tolerance 
     			&& other.getWLR() >= this.getWLR() - tolerance){ 
-    		return true;
+    		factor1 = true;
     	}
     	
-    	return false;
+    	//Second factor:
+    	//If total games played are within totalGameTolerance of each other
+    	if( Math.abs((this.getWins() + this.getLosses()) 
+    			- (other.getWins() + other.getLosses() )) < totalGameTolerance ){
+    		factor2 = true;
+    	}
+    	
+    	
+    	return factor1 && factor2;
     }
     
-    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance){
+    /*
+     * This function determines whether or not the current player is
+     * compatible with the team passed as an argument, using the
+     * tolerances specified as arguments as well. 
+     */
+    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, int totalGameTolerance){
     	boolean isCompatible = true;
     	for(Player p : team){
-    		if(!this.isCompatibleWith(p, tolerance)){
+    		if(!this.isCompatibleWith(p, tolerance, totalGameTolerance)){
     			isCompatible = false;
     		}
     	}

@@ -47,7 +47,7 @@ public class Test {
 			mmi.enterMatchmaking(p);
 		}
 		
-		Queue<Player> queue = mmi.getQueue();
+//		Queue<Player> queue = mmi.getQueue();
 
 		//Show all players that are in the queue currently
 //		Iterator<Player> itr = queue.iterator();
@@ -58,20 +58,42 @@ public class Test {
 //			System.out.printf(" WLR: %1.2f\n", p.getWLR());
 //		}
 		
-		//Attempt to match up 5 players; p1 -> p5 should be matched
+		//Attempt to match up 5v5 players
 		Match m = mmi.findMatch(5);
 		HashSet<Player> team1 = (HashSet<Player>) m.getTeam1();
 		HashSet<Player> team2 = (HashSet<Player>) m.getTeam2();
 		
+		
+		//TODO: Team "Scores" to see if two teams are compatible
+		//Team score = sum of total games played / sum of WLRs
+		double team1WLR = 0;
+		double team1GamesPlayed = 0;
+		
+		double team2WLR = 0;
+		double team2GamesPlayed = 0;
+		
 		System.out.println("***TEAM 1:***");
 		for(Player player: team1){
-			System.out.println(player);
+			System.out.print(player);
+			System.out.printf(" Total: %d, WLR: %f\n",
+					player.getWins() + player.getLosses(), player.getWLR());
+			 team1WLR += player.getWLR();
+			 team1GamesPlayed += player.getWins() + player.getLosses();
 		}
+		
+		System.out.println("Team 1 'score': " + team1GamesPlayed / team1WLR);
+		System.out.println();
 		
 		System.out.println("***TEAM 2:***");
 		for(Player player: team2){
-			System.out.println(player);
+			System.out.print(player);
+			System.out.printf(" Total: %d, WLR: %f\n",
+					player.getWins() + player.getLosses(), player.getWLR()); 
+			 team2WLR += player.getWLR();
+			 team2GamesPlayed += player.getWins() + player.getLosses();
 		}
+		
+		System.out.println("Team 2 'score': " + team2GamesPlayed / team2WLR);
 	}
 
 }
