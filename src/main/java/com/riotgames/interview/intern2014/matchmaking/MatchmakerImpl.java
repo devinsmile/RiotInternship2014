@@ -25,39 +25,49 @@ public class MatchmakerImpl implements Matchmaker {
 		//Set up our variables
 		double tolerance = 0.00; //our initial/current tolerance for matchmaking
 		int totalGameTolerance = 100; //initial/current total game tolerance
-		
+
 		int attempts = 100; //If we try 1000 times and cannot find a team, quit
-		
+
 		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
 		Player p1 = null;
 		while(itr.hasNext() && attempts > 0){
 			p1 = itr.next();
-			
-			//TODO: Coalesce these two if-statements into one
-			
-			//Make sure the player is a good fit for both teams:
+
+			//If p1 is a good match for both teams:
 			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)
-					&& team1.size() < playersPerTeam
 					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)){
-				team1.add(p1); //Add player to team1
-				itr.remove(); //Remove player from queue.
+
+				//If team 1 isn't full yet,
+				if( team1.size() < playersPerTeam ){
+					//Add p1 to team 1!
+					team1.add(p1);
+
+					//Remove p1 from the Matchmaking queue.
+					itr.remove();
+				}
+
+				//If team 2 isn't full yet,
+				else if( team2.size() < playersPerTeam){
+					//Add p1 to team 2!
+					team2.add(p1);
+
+					//Remove p1 from matchmaking queue.
+					itr.remove();
+				}
 			}
 
-			//Again, make sure the player is a good fit for both teams:
-			else if(p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)
-					&& team2.size() < playersPerTeam
-					&& p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)){
-				team2.add(p1); //Add player to team2
-				itr.remove(); //Remove player from queue.
-			}
-			
+			//If our teams are both full:
 			if(team1.size() == playersPerTeam && team2.size() == playersPerTeam){
-				break; //Teams found! Can stop searching.
+				//Teams found! Can stop searching.
+				return new Match(team1, team2);
 			}
-			
-			//If we still haven't found a match, yet reached the end of
-			// the queue, loosen our tolerance up a bit!
+
+			/*
+			 * If we still haven't found our teams yet, but we've
+			 * reached the end of the queue, start over from the 
+			 * beginning but loosen the tolerances ever-so slightly.
+			 */
 			if(!itr.hasNext() && this.matchmakingQueue.size() > 0){
 				itr = this.matchmakingQueue.iterator();
 				tolerance += 0.01;
@@ -66,10 +76,9 @@ public class MatchmakerImpl implements Matchmaker {
 			}
 		}
 
-		if(attempts != 0 || (team1.size() == playersPerTeam && team2.size() == playersPerTeam))
-			return new Match(team1, team2);
-		else
-			return null;
+		//We attempted to find a team too many times, and failed.
+		//Return null, signifying there is no good team match.
+		return null;
 	}
 
 	public void enterMatchmaking(Player player) {
