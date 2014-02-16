@@ -21,31 +21,39 @@ public class MatchmakerImpl implements Matchmaker {
 		//Set up our two teams as HashSets
 		Set<Player> team1 = new HashSet<Player>();
 		Set<Player> team2 = new HashSet<Player>();
-		
+
 		//Set up our variables
-		int playersInTeam1 = 0; //Our team1 counter
-		int playersInTeam2 = 0; //Our team2 counter
+		double tolerance = 0.35; //our initial/current tolerance for matchmaking
+		int attempts = 1000; //If we try 1000 times and cannot find a team, quit
 		
-		double tolerance = 0.05; //our tolerance for matchmaking
-		
+		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
-		Player p1 = null, p2 = null;
-		
-		while(itr.hasNext()){
+		Player p1 = null;
+		while(itr.hasNext() && attempts > 0){
 			p1 = itr.next();
-			
-			if(itr.hasNext())
-				p2 = itr.next();
-			
-			if(p1 != null && p2 != null){
-				if(p1.isCompatibleWith(p2, tolerance)){
-					team1.add(p1); 
-					team1.add(p2);
-				}
+			if(p1.isCompatibleWithTeam(team1, tolerance)
+					&& team1.size() < 5){
+				team1.add(p1); //Add player to team1
+				itr.remove(); //Remove player from queue.
 			}
+
+			else if(p1.isCompatibleWithTeam(team2, tolerance)
+					&& team2.size() < 5){
+				team2.add(p1); //Add player to team2
+				itr.remove(); //Remove player from queue.
+			}
+			
+			if(team1.size() > 5 && team2.size() > 5){
+				break; //Teams found! Can stop searching.
+			}
+			
+			attempts--; //We should only try 1000 times before we give up.
 		}
-		
-		return new Match(team1, team2);
+
+		if(attempts != 0)
+			return new Match(team1, team2);
+		else
+			return null;
 	}
 
 	public void enterMatchmaking(Player player) {

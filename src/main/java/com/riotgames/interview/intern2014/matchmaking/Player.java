@@ -1,5 +1,7 @@
 package com.riotgames.interview.intern2014.matchmaking;
 
+import java.util.Set;
+
 /**
  * <p>
  * Representation of a player.
@@ -56,6 +58,17 @@ public class Player implements Comparable<Player>{
     	}
     	
     	return false;
+    }
+    
+    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance){
+    	boolean isCompatible = true;
+    	for(Player p : team){
+    		if(!this.isCompatibleWith(p, tolerance)){
+    			isCompatible = false;
+    		}
+    	}
+    	
+    	return isCompatible;
     }
     
     /*

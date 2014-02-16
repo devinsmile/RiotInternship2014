@@ -14,22 +14,38 @@ public class Test {
 		//Initialize our MatchmakerImplementation
 		MatchmakerImpl mmi = new MatchmakerImpl();
 		
-		//Create two dummy players 
-		Player p1 = new Player("Ricky", 80, 100); //WLR 0.80
-		Player p2 = new Player("Krissy", 85, 100); //WLR 0.85
-		Player p3 = new Player("Topkek", 85, 100); //WLR 0.85
-		Player p4 = new Player("Toplel", 80, 100); // WLR 0.80
-		Player p5 = new Player("Tophue", 85, 100); //WLR 0.85
+		//Create ten dummy players - five for each team
+		//Team 1:
+//		Player p1 = new Player("Ricky", 80, 100); //WLR 0.80
+//		Player p2 = new Player("Krissy", 85, 100); //WLR 0.85
+//		Player p3 = new Player("Topkek", 85, 100); //WLR 0.85
+//		Player p4 = new Player("Toplel", 80, 100); // WLR 0.80
+//		Player p5 = new Player("Tophue", 85, 100); //WLR 0.80
+//		
+//		//Team 2:
+//		Player p6 = new Player("Troll1", 50, 1000); //WLR 0.05
+//		Player p7 = new Player("Troll2", 50, 1000); //WLR 0.05
+//		Player p8 = new Player("Troll3", 50, 1000); //WLR 0.05
+//		Player p9 = new Player("Troll4", 50, 1000); //WLR 0.05
+//		Player p10 = new Player("Troll5", 50, 1000); //WLR 0.05
 
-		//Add the first three to the matchmaking system
-//		mmi.enterMatchmaking(players.get(0));
-//		mmi.enterMatchmaking(players.get(1));
-//		mmi.enterMatchmaking(players.get(2));
-		mmi.enterMatchmaking(p1);
-		mmi.enterMatchmaking(p2);
-		mmi.enterMatchmaking(p3);
-		mmi.enterMatchmaking(p4);
-		mmi.enterMatchmaking(p5);
+		//Add all players to matchmaking queue
+		//Team 1:
+//		mmi.enterMatchmaking(p1);
+//		mmi.enterMatchmaking(p2);
+//		mmi.enterMatchmaking(p3);
+//		mmi.enterMatchmaking(p4);
+//		mmi.enterMatchmaking(p5);
+//		
+//		//Team 2:
+//		mmi.enterMatchmaking(p6);
+//		mmi.enterMatchmaking(p7);
+//		mmi.enterMatchmaking(p8);
+//		mmi.enterMatchmaking(p9);
+//		mmi.enterMatchmaking(p10);
+		for(Player p : players){
+			mmi.enterMatchmaking(p);
+		}
 		
 		Queue<Player> queue = mmi.getQueue();
 
@@ -45,12 +61,17 @@ public class Test {
 		//Attempt to match up 5 players; p1 -> p5 should be matched
 		Match m = mmi.findMatch(5);
 		HashSet<Player> team1 = (HashSet<Player>) m.getTeam1();
+		HashSet<Player> team2 = (HashSet<Player>) m.getTeam2();
 		
 		System.out.println("***TEAM 1:***");
 		for(Player player: team1){
 			System.out.println(player);
 		}
 		
+		System.out.println("***TEAM 2:***");
+		for(Player player: team2){
+			System.out.println(player);
+		}
 	}
 
 }
