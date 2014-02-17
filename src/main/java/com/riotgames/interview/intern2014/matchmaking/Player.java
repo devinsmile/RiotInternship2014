@@ -99,32 +99,16 @@ public class Player implements Comparable<Player>{
 		boolean factor3 = true;
 
 		if(numFactors >= 1){
-			//First factor:
-			// this.WLR +/- tolerance of the other WLR
-			if(Math.abs(this.getWLR() - other.getWLR()) <= ratioTolerance){ 
-				factor1 = true;
-			}
-			
-			else
-				factor1 = false;
+			//Check our first quality factor
+			factor1 = qualityFactor1(this, other, ratioTolerance);
 		}
 
 		if(numFactors >= 2){
-			//Second factor:
-			//If total games played are within totalGameTolerance of each other
-			if( Math.abs((this.getTotalPlayed()) 
-					- (other.getTotalPlayed() )) <= totalGameTolerance ){
-				factor2 = true;
-			}
-			
-			else
-				factor2 = false;
+			factor2 = qualityFactor2(this, other, totalGameTolerance);
 		}
 
 		if(numFactors >= 3){
-			//Third factor:
-			//If the difference in the players' scores is too great
-			factor3 = Math.abs(this.score - other.score) <= playerScoreTolerance;
+			factor3 = qualityFactor3(this, other, playerScoreTolerance);
 		}
 
 		//TODO: Add/fix individual score as a compatibility factor.
@@ -146,7 +130,7 @@ public class Player implements Comparable<Player>{
 	 * @param numFactors This is the number of compatibility factors we wish to check against. 3 is the most strict but best quality, 0 is the worst quality but will match any players.
 	 * @return Whether or not the two players are compatible.
 	 */
-	
+
 	public boolean isCompatibleWithTeam(Set<Player> team, double ratioTolerance, long totalGameTolerance,
 			long playerScoreTolerance, int numFactors){
 		boolean isCompatible = true;
@@ -158,6 +142,62 @@ public class Player implements Comparable<Player>{
 
 		return isCompatible;
 	}
+
+	/**
+	 * Factor 1 of the matchmaking system. 
+	 * Checks Win/Loss Ratio +/- a tolerance
+	 * 
+	 * @param p1 The first player in the comparison.
+	 * @param p2 The second player in the comparison
+	 * @param ratioTolerance The tolerance of Win/Loss ratio allowed.
+	 */
+	public boolean qualityFactor1(Player p1, Player p2, double ratioTolerance){
+		//First factor:
+		// this.WLR +/- tolerance of the other WLR
+		if(Math.abs(p1.getWLR() - p2.getWLR()) <= ratioTolerance){ 
+			return true;
+		}
+
+		else{
+			return false;
+		}
+	}
+
+	/**
+	 * Factor 2 of the matchmaking system. 
+	 * Total games played +/- another tolerance
+	 * 
+	 * @param p1 The first player in the comparison.
+	 * @param p2 The second player in the comparison
+	 * @param totalGameTolerance The tolerance of Total Games played allowed.
+	 */
+	public boolean qualityFactor2(Player p1, Player p2, double totalGameTolerance){
+		//Second factor:
+		//If total games played are within totalGameTolerance of each other
+		if( Math.abs((p1.getTotalPlayed()) 
+				- (p2.getTotalPlayed() )) <= totalGameTolerance ){
+			return true;
+		}
+
+		else{
+			return false;
+		}
+	}
+	
+	/**
+	 * Factor 3 of the matchmaking system. 
+	 * Total games played +/- another tolerance
+	 * 
+	 * @param p1 The first player in the comparison.
+	 * @param p2 The second player in the comparison
+	 * @param playerScoreTolerance The tolerance of Player Score difference allowed.
+	 */
+	public boolean qualityFactor3(Player p1, Player p2, double playerScoreTolerance){
+		//Third factor:
+		//If the difference in the players' scores is too great
+		return Math.abs(p1.score - p2.score) <= playerScoreTolerance;
+	}
+	
 
 	/*
 	 * Allows us to arbitrarily compare two players based on Win/Loss Ratio (non-Javadoc)

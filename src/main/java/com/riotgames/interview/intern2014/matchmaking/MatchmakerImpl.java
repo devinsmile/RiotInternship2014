@@ -65,10 +65,6 @@ public class MatchmakerImpl implements Matchmaker {
 				return new Match(team1, team2);
 			}
 			
-			if(this.matchmakingQueue.size() <= 20 && attempts < 100){
-				if(numFactors > 0) 
-					numFactors--;
-			}
 
 			/*
 			 * If we still haven't found our teams yet, but we've
@@ -81,6 +77,14 @@ public class MatchmakerImpl implements Matchmaker {
 				totalGameTolerance += 10; //Bump up the total games played tolerance
 				playerScoreTolerance += 100; //Bump up the playerScore tolerance.
 				attempts--; //We should only try 1000 times before we give up.
+			}
+			
+			//If we're in the last few attempts to make a game, we should
+			//Reduce the number of quality factors we check, to make sure that
+			//Every player gets into a game, regardless of fairness at this point.
+			if(attempts < 4){
+				if(numFactors > 0) 
+					numFactors--;
 			}
 		}
 
