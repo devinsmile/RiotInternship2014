@@ -24,10 +24,11 @@ public class MatchmakerImpl implements Matchmaker {
 
 		//Set up our variables
 		double tolerance = 0.00; //our initial/current tolerance for matchmaking
-		int totalGameTolerance = 50; //initial/current total game tolerance
-		int playerScoreTolerance = 100; //initial/current player score tolerance
+		long totalGameTolerance = 50; //initial/current total game tolerance
+		long playerScoreTolerance = 100; //initial/current player score tolerance
+		int numFactors = 3; //The number of quality factors for matchmaking.
 		
-		int attempts = 500; //If we try 1000 times and cannot find a team, quit
+		int attempts = 1000; //If we try 1000 times and cannot find a team, quit
 
 		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
@@ -36,8 +37,8 @@ public class MatchmakerImpl implements Matchmaker {
 			p1 = itr.next();
 
 			//If p1 is a good match for both teams:
-			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance, playerScoreTolerance)
-					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance, playerScoreTolerance)){
+			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance, playerScoreTolerance, numFactors)
+					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance, playerScoreTolerance, numFactors)){
 
 				//If team 1 isn't full yet,
 				if( team1.size() < playersPerTeam ){
@@ -63,6 +64,11 @@ public class MatchmakerImpl implements Matchmaker {
 				//Teams found! Can stop searching.
 				return new Match(team1, team2);
 			}
+			
+			if(this.matchmakingQueue.size() <= 20 && attempts < 100){
+				if(numFactors > 0) 
+					numFactors--;
+			}
 
 			/*
 			 * If we still haven't found our teams yet, but we've
@@ -73,8 +79,8 @@ public class MatchmakerImpl implements Matchmaker {
 				itr = this.matchmakingQueue.iterator();
 				tolerance += 0.01; //Bump up the WLR tolerance
 				totalGameTolerance += 10; //Bump up the total games played tolerance
-				playerScoreTolerance += 10; //Bump up the playerScore tolerance.
-				attempts--; //We should only try 100 times before we give up.
+				playerScoreTolerance += 100; //Bump up the playerScore tolerance.
+				attempts--; //We should only try 1000 times before we give up.
 			}
 		}
 

@@ -29,7 +29,7 @@ public class Player implements Comparable<Player>{
         
         //Score = (Total Games Played / WLR)
         //TODO Make this actually work well
-        this.score =  this.getWins();
+        this.score =  this.getWLR();
     }
 
     public String getName() {
@@ -45,7 +45,10 @@ public class Player implements Comparable<Player>{
     }
     
     public long getTotalPlayed(){
-    	return this.wins + this.losses;
+    	if(this.wins + this.losses >= 0)
+    		return this.wins + this.losses;
+    	else
+    		return Long.MAX_VALUE; //TODO: Figure this problem out.
     }
     
     public double getScore(){
@@ -57,7 +60,11 @@ public class Player implements Comparable<Player>{
      * 
      */
     public double getWLR(){
-    	return (double)this.wins / (double)this.getTotalPlayed();
+    	//Make sure we aren't dividing by 0.
+    	if(this.getLosses() != 0)
+    		return (double)this.wins / (double)this.getTotalPlayed();
+    	else
+    		return (double)this.wins;
     }
     
     /*
@@ -68,8 +75,8 @@ public class Player implements Comparable<Player>{
      * Factor 1: Win/Loss Ratio +/- a tolerance
      * Factor 2: Total games played +/- another tolerance
      */
-    public boolean isCompatibleWith(Player other, double tolerance, int totalGameTolerance, 
-    		int playerScoreTolerance){
+    public boolean isCompatibleWith(Player other, double tolerance, long totalGameTolerance, 
+    		long playerScoreTolerance, int numFactors){
     	boolean factor1 = false;
     	boolean factor2 = false;
     	boolean factor3 = false;
@@ -100,11 +107,11 @@ public class Player implements Comparable<Player>{
      * compatible with the team passed as an argument, using the
      * tolerances specified as arguments as well. 
      */
-    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, int totalGameTolerance,
-    		int playerScoreTolerance){
+    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, long totalGameTolerance,
+    		long playerScoreTolerance, int numFactors){
     	boolean isCompatible = true;
     	for(Player p : team){
-    		if(!this.isCompatibleWith(p, tolerance, totalGameTolerance, playerScoreTolerance)){
+    		if(!this.isCompatibleWith(p, tolerance, totalGameTolerance, playerScoreTolerance, numFactors)){
     			isCompatible = false;
     		}
     	}
