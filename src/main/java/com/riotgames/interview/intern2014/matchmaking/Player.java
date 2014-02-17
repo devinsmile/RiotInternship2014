@@ -44,6 +44,10 @@ public class Player implements Comparable<Player>{
 		return losses;
 	}
 
+	/**
+	 * Computes the total number of games played.
+	 * @return The total number of games this player has played.
+	 */
 	public long getTotalPlayed(){
 		if(this.wins + this.losses >= 0)
 			return this.wins + this.losses;
@@ -51,13 +55,18 @@ public class Player implements Comparable<Player>{
 			return Long.MAX_VALUE; //TODO: Figure this problem out.
 	}
 
+	/**
+	 * Computes the arbitrary "score" of a player, used to 
+	 * weigh the player in this matchmaking system.
+	 * @return The arbitrary computed score/weight of this player.
+	 */
 	public double getScore(){
 		return this.score;
 	}
 
-	/*
-	 * Returns the Win/Loss ratio (Wins / Losses).
-	 * 
+	/**
+	 * Computes the Win/Loss ratio of this player.
+	 * @return Win/Loss Ratio as a double.
 	 */
 	public double getWLR(){
 		//Make sure we aren't dividing by 0.
@@ -67,15 +76,23 @@ public class Player implements Comparable<Player>{
 			return (double)this.wins;
 	}
 
-	/*
+	/**
 	 * This uses two factors of compatibility to determine whether
 	 * or not two players are potentially compatible with each other
 	 * to be on a team. 
 	 * 
 	 * Factor 1: Win/Loss Ratio +/- a tolerance
 	 * Factor 2: Total games played +/- another tolerance
+	 * Factor 3: Making sure that the player score difference is within a third tolerance.
+	 * 
+	 * @param other	Another player to check compatibility with.
+	 * @param ratioTolerance This is the maximum allowed tolerance of Win/Loss ratio between two players.
+	 * @param totalGameTolerance This is the maximum allowed tolerance of total games played between two players.
+	 * @param playerScoreTolerance This is the maximum allowed tolerance of player score between two players.
+	 * @param numFactors This is the number of compatibility factors we wish to check against. 3 is the most strict but best quality, 0 is the worst quality but will match any players.
+	 * @return Whether or not the two players are compatible.
 	 */
-	public boolean isCompatibleWith(Player other, double tolerance, long totalGameTolerance, 
+	public boolean isCompatibleWith(Player other, double ratioTolerance, long totalGameTolerance, 
 			long playerScoreTolerance, int numFactors){
 		boolean factor1 = true;
 		boolean factor2 = true;
@@ -84,7 +101,7 @@ public class Player implements Comparable<Player>{
 		if(numFactors >= 1){
 			//First factor:
 			// this.WLR +/- tolerance of the other WLR
-			if(Math.abs(this.getWLR() - other.getWLR()) <= tolerance){ 
+			if(Math.abs(this.getWLR() - other.getWLR()) <= ratioTolerance){ 
 				factor1 = true;
 			}
 			
@@ -114,16 +131,27 @@ public class Player implements Comparable<Player>{
 		return factor1 && factor2 && factor3;
 	}
 
-	/*
-	 * This function determines whether or not the current player is
-	 * compatible with the team passed as an argument, using the
-	 * tolerances specified as arguments as well. 
+	/**
+	 * This method checks compatibility of this player against an entire team, using the 
+	 * individual comparison method above.
+	 * 
+	 * Factor 1: Win/Loss Ratio +/- a tolerance
+	 * Factor 2: Total games played +/- another tolerance
+	 * Factor 3: Making sure that the player score difference is within a third tolerance.
+	 * 
+	 * @param team A team to check compatibility with.
+	 * @param ratioTolerance This is the maximum allowed tolerance of Win/Loss ratio between two players.
+	 * @param totalGameTolerance This is the maximum allowed tolerance of total games played between two players.
+	 * @param playerScoreTolerance This is the maximum allowed tolerance of player score between two players.
+	 * @param numFactors This is the number of compatibility factors we wish to check against. 3 is the most strict but best quality, 0 is the worst quality but will match any players.
+	 * @return Whether or not the two players are compatible.
 	 */
-	public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, long totalGameTolerance,
+	
+	public boolean isCompatibleWithTeam(Set<Player> team, double ratioTolerance, long totalGameTolerance,
 			long playerScoreTolerance, int numFactors){
 		boolean isCompatible = true;
 		for(Player p : team){
-			if(!this.isCompatibleWith(p, tolerance, totalGameTolerance, playerScoreTolerance, numFactors)){
+			if(!this.isCompatibleWith(p, ratioTolerance, totalGameTolerance, playerScoreTolerance, numFactors)){
 				isCompatible = false;
 			}
 		}

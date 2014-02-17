@@ -50,8 +50,6 @@ public class Test {
 					printMatchup(mat);
 					matcount++;
 				}
-
-				//				System.out.println("Match found!");
 			}
 
 			System.out.println("Match count: " + matcount + " out of " + (players.size() / 10));
