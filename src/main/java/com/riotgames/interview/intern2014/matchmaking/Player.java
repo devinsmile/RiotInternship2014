@@ -20,11 +20,16 @@ public class Player implements Comparable<Player>{
     private final String name;
     private final long wins;
     private final long losses;
+    private final double score; //This is computed at runtime
     
     public Player(String name, long wins, long losses) {
         this.name = name;
         this.wins = wins;
         this.losses = losses;
+        
+        //Score = (Total Games Played / WLR)
+        //TODO Make this actually work well
+        this.score =  this.getWins();
     }
 
     public String getName() {
@@ -39,12 +44,20 @@ public class Player implements Comparable<Player>{
         return losses;
     }
     
+    public long getTotalPlayed(){
+    	return this.wins + this.losses;
+    }
+    
+    public double getScore(){
+    	return this.score;
+    }
+    
     /*
      * Returns the Win/Loss ratio (Wins / Losses).
      * 
      */
     public double getWLR(){
-    	return (double)wins / (double)losses;
+    	return (double)this.wins / (double)this.getTotalPlayed();
     }
     
     /*
@@ -55,26 +68,31 @@ public class Player implements Comparable<Player>{
      * Factor 1: Win/Loss Ratio +/- a tolerance
      * Factor 2: Total games played +/- another tolerance
      */
-    public boolean isCompatibleWith(Player other, double tolerance, int totalGameTolerance){
+    public boolean isCompatibleWith(Player other, double tolerance, int totalGameTolerance, 
+    		int playerScoreTolerance){
     	boolean factor1 = false;
     	boolean factor2 = false;
+    	boolean factor3 = false;
     	
     	//First factor:
     	// this.WLR +/- tolerance of the other WLR
-    	if(other.getWLR() <= this.getWLR() + tolerance 
-    			&& other.getWLR() >= this.getWLR() - tolerance){ 
+    	if(Math.abs(this.getWLR() - other.getWLR()) <= tolerance){ 
     		factor1 = true;
     	}
     	
     	//Second factor:
     	//If total games played are within totalGameTolerance of each other
-    	if( Math.abs((this.getWins() + this.getLosses()) 
-    			- (other.getWins() + other.getLosses() )) < totalGameTolerance ){
+    	if( Math.abs((this.getTotalPlayed()) 
+    			- (other.getTotalPlayed() )) <= totalGameTolerance ){
     		factor2 = true;
     	}
     	
+    	//Third factor:
+    	//If the difference in the players' scores is too great
+    	factor3 = Math.abs(this.score - other.score) <= playerScoreTolerance;
     	
-    	return factor1 && factor2;
+    	//TODO: Add/fix individual score as a compatibility factor.
+    	return factor1 && factor2 && factor3;
     }
     
     /*
@@ -82,10 +100,11 @@ public class Player implements Comparable<Player>{
      * compatible with the team passed as an argument, using the
      * tolerances specified as arguments as well. 
      */
-    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, int totalGameTolerance){
+    public boolean isCompatibleWithTeam(Set<Player> team, double tolerance, int totalGameTolerance,
+    		int playerScoreTolerance){
     	boolean isCompatible = true;
     	for(Player p : team){
-    		if(!this.isCompatibleWith(p, tolerance, totalGameTolerance)){
+    		if(!this.isCompatibleWith(p, tolerance, totalGameTolerance, playerScoreTolerance)){
     			isCompatible = false;
     		}
     	}
@@ -118,7 +137,7 @@ public class Player implements Comparable<Player>{
      * @see java.lang.Object#toString()
      */
     public String toString(){
-    	return this.name + "   Wins: " + this.wins + " Losses: " + this.losses;
+    	return this.name + "   Wins: " + this.wins + " Losses: " + this.losses + " Score: " + this.score;
     }
 
 }

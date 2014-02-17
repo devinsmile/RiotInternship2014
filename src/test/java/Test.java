@@ -36,17 +36,29 @@ public class Test {
 		//Get our Iterator to use for the queue
 		Iterator<Player> itr = null;
 
+		Match mat = null; //Store our matches as we add them.
+
+		int matcount = 0;
+
 		//While our queue isn't empty, keep finding matches
 		while(!queue.isEmpty()){
 			itr = queue.iterator();
 			while(itr.hasNext()){
-				matches.add(mmi.findMatch(5));
-//				System.out.println("Match found!");
+				mat = mmi.findMatch(5);
+				matches.add(mat);
+				if(mat != null){
+					printMatchup(mat);
+					matcount++;
+				}
+
+				//				System.out.println("Match found!");
 			}
+
+			System.out.println("Match count: " + matcount + " out of " + (players.size() / 10));
 		}
-		
-		System.out.println("********** SAMPLE MATCHUP: **********");
-		printMatchup(m);
+
+		//System.out.println("********** SAMPLE MATCHUP: **********");
+		//printMatchup(m);
 
 	}
 
@@ -58,35 +70,42 @@ public class Test {
 		//Set up variables:
 		double team1WLR = 0;
 		double team1GamesPlayed = 0;
+		double team1Score = 0;
 
 		double team2WLR = 0;
 		double team2GamesPlayed = 0;
+		double team2Score = 0;
 
 		//Print out Team 1 players and stats
 		System.out.println("***TEAM 1:***");
 		for(Player player: team1){
 			System.out.print(player);
 			System.out.printf(" Total: %d, WLR: %f\n",
-					player.getWins() + player.getLosses(), player.getWLR());
+					player.getTotalPlayed(), player.getWLR());
 			team1WLR += player.getWLR();
-			team1GamesPlayed += player.getWins() + player.getLosses();
+			team1GamesPlayed += player.getTotalPlayed();
 		}
 
-		System.out.println("Team 1 'score': " + team1GamesPlayed / team1WLR);
+		team1Score =  team1GamesPlayed / team1WLR;
 		System.out.println();
 
-		
+
 		//Print out Team 2 players and stats
 		System.out.println("***TEAM 2:***");
 		for(Player player: team2){
 			System.out.print(player);
 			System.out.printf(" Total: %d, WLR: %f\n",
-					player.getWins() + player.getLosses(), player.getWLR()); 
+					player.getTotalPlayed(), player.getWLR()); 
 			team2WLR += player.getWLR();
-			team2GamesPlayed += player.getWins() + player.getLosses();
+			team2GamesPlayed += player.getTotalPlayed();
 		}
 
-		System.out.println("Team 2 'score': " + team2GamesPlayed / team2WLR);
+		team2Score =  team2GamesPlayed / team2WLR;
+
+		double team1Odds = (team1Score / ( team1Score + team2Score ) * 100);
+		double team2Odds = (team2Score / ( team1Score + team2Score ) * 100);
+
+		System.out.printf("Team 1 Odds: %2.2f%%. Team 2 Odds: %2.2f%%.\n\n", team1Odds, team2Odds);
 	}
 
 }

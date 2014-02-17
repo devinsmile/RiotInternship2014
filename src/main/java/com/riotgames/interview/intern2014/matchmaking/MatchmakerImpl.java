@@ -24,9 +24,10 @@ public class MatchmakerImpl implements Matchmaker {
 
 		//Set up our variables
 		double tolerance = 0.00; //our initial/current tolerance for matchmaking
-		int totalGameTolerance = 100; //initial/current total game tolerance
-
-		int attempts = 100; //If we try 1000 times and cannot find a team, quit
+		int totalGameTolerance = 50; //initial/current total game tolerance
+		int playerScoreTolerance = 100; //initial/current player score tolerance
+		
+		int attempts = 500; //If we try 1000 times and cannot find a team, quit
 
 		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
@@ -35,8 +36,8 @@ public class MatchmakerImpl implements Matchmaker {
 			p1 = itr.next();
 
 			//If p1 is a good match for both teams:
-			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance)
-					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance)){
+			if(p1.isCompatibleWithTeam(team1, tolerance, totalGameTolerance, playerScoreTolerance)
+					&& p1.isCompatibleWithTeam(team2, tolerance, totalGameTolerance, playerScoreTolerance)){
 
 				//If team 1 isn't full yet,
 				if( team1.size() < playersPerTeam ){
@@ -71,7 +72,8 @@ public class MatchmakerImpl implements Matchmaker {
 			if(!itr.hasNext() && this.matchmakingQueue.size() > 0){
 				itr = this.matchmakingQueue.iterator();
 				tolerance += 0.01; //Bump up the WLR tolerance
-				totalGameTolerance += 15; //Bump up the total games played tolerance
+				totalGameTolerance += 10; //Bump up the total games played tolerance
+				playerScoreTolerance += 10; //Bump up the playerScore tolerance.
 				attempts--; //We should only try 100 times before we give up.
 			}
 		}
