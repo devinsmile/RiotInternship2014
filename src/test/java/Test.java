@@ -38,7 +38,7 @@ public class Test {
 
 		Match mat = null; //Store our matches as we add them.
 
-		int matcount = 0;
+		int matcount = 1;
 
 		//While our queue isn't empty, keep finding matches
 		while(!queue.isEmpty()){
