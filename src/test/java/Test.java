@@ -36,7 +36,8 @@ public class Test {
 		//Get our Iterator to use for the queue
 		Iterator<Player> itr = null;
 
-		Match mat = null; //Store our matches as we add them.
+		//Create a Match object to store future matches.
+		Match mat = null; 
 
 		int matcount = 1;
 
@@ -49,6 +50,9 @@ public class Test {
 				if(mat != null){
 					printMatchup(mat);
 					matcount++;
+				}
+				else{
+					System.out.println("Unable to match the current queue of players.");
 				}
 			}
 

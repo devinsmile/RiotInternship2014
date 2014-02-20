@@ -24,8 +24,8 @@ public class Player implements Comparable<Player>{
 
 	public Player(String name, long wins, long losses) {
 		this.name = name;
-		this.wins = wins;
-		this.losses = losses;
+		this.wins = Math.abs(wins);
+		this.losses = Math.abs(losses);
 
 		//Score = (Total Games Played / WLR)
 		//TODO Make this actually work well
