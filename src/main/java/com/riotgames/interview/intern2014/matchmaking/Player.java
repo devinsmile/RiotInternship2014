@@ -14,6 +14,8 @@ import java.util.Set;
  * {@link SampleData} such that it provides a useful data set to exercise your
  * solution.
  * </p>
+ * 
+ * @author Riot Games, Riccardo Mutschlechner
  */
 public class Player implements Comparable<Player>{
 
@@ -38,7 +40,6 @@ public class Player implements Comparable<Player>{
 		this.losses = Math.abs(losses);
 
 		//Score = (Total Games Played / WLR)
-		//TODO Make this actually work well
 		this.score =  this.getWLR();
 	}
 
@@ -59,10 +60,11 @@ public class Player implements Comparable<Player>{
 	 * @return The total number of games this player has played.
 	 */
 	public long getTotalPlayed(){
+		//If we have overflow, something bad happened.
 		if(this.wins + this.losses >= 0)
 			return this.wins + this.losses;
 		else
-			return Long.MAX_VALUE; //TODO: Figure this problem out.
+			return Long.MAX_VALUE;
 	}
 
 	/**
@@ -121,7 +123,6 @@ public class Player implements Comparable<Player>{
 			factor3 = qualityFactor3(this, other, playerScoreTolerance);
 		}
 
-		//TODO: Add/fix individual score as a compatibility factor.
 		return factor1 && factor2 && factor3;
 	}
 

@@ -7,7 +7,15 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * The matchmaking implementation that you will write.
+ * This is my Matchmaking system.
+ * This system works as follows:
+ * 1. Attempt to find a team of people with relatively close stats.
+ * 2. As the attempts fail, the tolerances get less strict. 
+ * 3. If the players are still waiting in queue for a long time and unmatched,
+ * 		the players will be matched in somewhat unfair games, as all players do get matched eventually.
+ * 4. If the match is somehow not possible to set up (uneven number of players left in queue, etc), this will return null.
+ * 
+ * @author Riot Games, Riccardo Mutschlechner
  */
 public class MatchmakerImpl implements Matchmaker {
 

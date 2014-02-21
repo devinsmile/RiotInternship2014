@@ -1,5 +1,3 @@
-import static org.junit.Assert.*;
-
 import org.junit.runners.Suite;
 import org.junit.runner.RunWith;
 

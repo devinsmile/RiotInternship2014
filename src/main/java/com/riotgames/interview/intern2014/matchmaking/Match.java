@@ -2,6 +2,12 @@ package com.riotgames.interview.intern2014.matchmaking;
 
 import java.util.Set;
 
+/**
+ * This class contains a Match. 
+ * A match has two Set<Player> of teams: team1, and team 2. 
+ * 
+ * @author Riot Games, Riccardo Mutschlechner
+ */
 public class Match {
 
     private final Set<Player> team1;

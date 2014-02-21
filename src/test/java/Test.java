@@ -6,6 +6,19 @@ import java.util.LinkedList;
 
 import com.riotgames.interview.intern2014.matchmaking.*;
 
+/**
+ * This class is a test class that essentially takes all of the steps
+ * necessary to set up a Matchmaking example as well as print some useful result.
+ * 
+ * This class is used by running the main method, which will:
+ * 1. Read in the Data Set from SampleData.java.
+ * 2. Create/instantiate an instance of the Matchmaker
+ * 3. Insert all of the players from the Data Set into the Matchmaking queue
+ * 4. Retrieve the matchmaking queue, and keep matching players until the queue is empty.
+ * 5. Print the match line-ups (Team1, Team2) and their calculated odds.
+ * 
+ * @author Riot Games, Riccardo Mutschlechner
+ */
 public class Test {
 	public static void main(String[] args){
 		//Get our sample list of players
@@ -59,7 +72,7 @@ public class Test {
 					matcount++;
 				}
 				else{
-					System.out.println("Unable to match the current queue of players.");
+					System.out.println("Unable to match all of the current data set of players.");
 				}
 			}
 

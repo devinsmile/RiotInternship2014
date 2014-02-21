@@ -1,5 +1,10 @@
 package com.riotgames.interview.intern2014.matchmaking;
 
+/**
+ * This class contains the interface for a Matchmaking system.
+ * @author Riot Games, Riccardo Mutschlechner
+ *
+ */
 public interface Matchmaker {
 
     /**
