@@ -36,12 +36,12 @@ public class PlayerTest {
 		//Create + Initialize a Player with hard-coded values.
 		String name = "Test";
 		long wins = 75;
-		long losses = 100;
-		double expectedWLR = 0.75;
+		long losses = 75;
+		double expectedWLR = 0.5;
 		Player p = new Player(name, wins, losses);
 		
-		//Make sure that our WLR is approximately 0.75 (doubles are not perfect).
-		assertEquals(p.getWLR(), expectedWLR, 0.01);
+		//Make sure that our WLR is approximately 0.5 (doubles are not perfect).
+		assertEquals(expectedWLR, p.getWLR(), 0.01);
 	}
 	
 	@Test
