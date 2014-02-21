@@ -11,7 +11,7 @@ import com.riotgames.interview.intern2014.matchmaking.Player;
 import com.riotgames.interview.intern2014.matchmaking.SampleData;
 
 
-public class MatchmakingTestSuite {
+public class MatchmakingTest {
 	protected List<Player> players;
 	protected MatchmakerImpl mmi;
 	protected Queue<Player> queue;
@@ -24,7 +24,12 @@ public class MatchmakingTestSuite {
 		
 		//Get our sample list of players
 		players = SampleData.getPlayers();
+		
+		queue = mmi.getQueue();
+	}
 
+	@Test
+	public void testPlayersAddedToQueue() {
 		//Enter all of our Players into the queue.
 		for(Player p : players){
 			mmi.enterMatchmaking(p);
@@ -32,10 +37,7 @@ public class MatchmakingTestSuite {
 		
 		//Retrieve the current Queue.
 		queue = mmi.getQueue();
-	}
-
-	@Test
-	public void testPlayersAddedToQueue() {
+		
 		assertTrue(queue.size() == players.size());
 	}
 	

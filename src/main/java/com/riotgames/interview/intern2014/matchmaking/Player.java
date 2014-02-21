@@ -21,6 +21,16 @@ public class Player implements Comparable<Player>{
 	private final long wins;
 	private final long losses;
 	private final double score; //This is computed at runtime
+	
+	/*
+	 * This is a constructor for a randomly generated player, used to create a random dataset.
+	 */
+	public Player(){
+		this.name = "Randomly Generated";
+		this.wins = (long)(Math.random() * 500);
+		this.losses = (long)(Math.random() * 500);
+		this.score = this.getWLR();
+	}
 
 	public Player(String name, long wins, long losses) {
 		this.name = name;

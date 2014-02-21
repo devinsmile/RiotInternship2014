@@ -28,7 +28,7 @@ public class MatchmakerImpl implements Matchmaker {
 		long playerScoreTolerance = 100; //initial/current player score tolerance
 		int numFactors = 3; //The number of quality factors for matchmaking.
 		
-		int attempts = 1000; //If we try 1000 times and cannot find a team, quit
+		int attempts = 100; //If we try 100 times and cannot find a team, quit
 
 		/* Get players for Teams */ 
 		Iterator<Player> itr = this.matchmakingQueue.iterator();
@@ -75,7 +75,7 @@ public class MatchmakerImpl implements Matchmaker {
 				itr = this.matchmakingQueue.iterator();
 				tolerance += 0.01; //Bump up the WLR tolerance
 				totalGameTolerance += 10; //Bump up the total games played tolerance
-				playerScoreTolerance += 100; //Bump up the playerScore tolerance.
+				playerScoreTolerance += 0.01; //Bump up the playerScore tolerance.
 				attempts--; //We should only try 1000 times before we give up.
 			}
 			

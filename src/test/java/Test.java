@@ -18,6 +18,13 @@ public class Test {
 		for(Player p : players){
 			mmi.enterMatchmaking(p);
 		}
+		
+		//Generate 400 random players and put them into matches.
+//		Player p = null;
+//		for(int i = 0; i < 1200; i++){
+//			p = new Player();
+//			mmi.enterMatchmaking(p);
+//		}
 
 		//Retrieve the current Queue.
 		Queue<Player> queue = mmi.getQueue();
